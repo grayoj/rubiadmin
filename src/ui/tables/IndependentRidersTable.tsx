@@ -218,7 +218,7 @@ export const IndependentRidersTable: React.FC = () => {
                         </tr>
                       </thead>
                       <tbody className='divide-y divide-basicDark bg-darkTheme'>
-                        {data?.content.map((rider: Rider) => (
+                        {data?.content?.map((rider: Rider) => (
                           <tr key={rider.id}>
                             <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
                               <div className='flex items-center'>
