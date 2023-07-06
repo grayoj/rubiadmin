@@ -210,12 +210,12 @@ export const MobileTable: React.FC = () => {
                       </thead>
                       <tbody className='divide-y divide-basicDark bg-darkTheme'>
                         {data?.content.map((user) => (
-                          <tr key={user.id}>
+                          <tr key={user?.id}>
                             <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div className='font-medium text-white cursor-pointer px-2 py-2 rounded-lg'>
-                                    RUB{user.id}
+                                    RUB{user?.id}
                                   </div>
                                 </div>
                               </div>
@@ -224,7 +224,7 @@ export const MobileTable: React.FC = () => {
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div className='font-medium text-white'>
-                                    {user.name}
+                                    {user?.name}
                                   </div>
                                 </div>
                               </div>
@@ -233,7 +233,7 @@ export const MobileTable: React.FC = () => {
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div className='font-medium text-white'>
-                                    {user.email}
+                                    {user?.email}
                                   </div>
                                 </div>
                               </div>
@@ -242,7 +242,7 @@ export const MobileTable: React.FC = () => {
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div className='font-medium text-white'>
-                                    {user.username}
+                                    {user?.username}
                                   </div>
                                 </div>
                               </div>
@@ -251,7 +251,7 @@ export const MobileTable: React.FC = () => {
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div className='font-medium text-white'>
-                                    {user.phone}
+                                    {user?.phone}
                                   </div>
                                 </div>
                               </div>
