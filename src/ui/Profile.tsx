@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Button } from './buttons/Button';
 import useLogout from '@/hooks/useLogout';
-import { RootState } from '@/store';
-import { useSelector } from 'react-redux';
+import { useGetAccount } from '@/hooks/useGetAccount';
 
 interface ProfileProps {}
 
 export const Profile: React.FC<ProfileProps> = () => {
   const logout = useLogout();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useGetAccount();
+
   return (
     <main className='flex-1 xl:ml-24 bg-basicDark mb-48 py-12'>
       <div className='mx-auto max-w-7xl pl-10 sm:px-6 lg:px-8'>
