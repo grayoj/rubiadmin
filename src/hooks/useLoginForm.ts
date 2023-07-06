@@ -52,7 +52,7 @@ export const useLoginForm = () => {
    toast.success('Login successful!', { autoClose: 2000 });
    setProgress(100);
    setTimeout(() => {
-    router.push('/dashboard');
+    router.push('/');
    }, 3000);
   } catch (error: any) {
    setIsModalOpen(true);
