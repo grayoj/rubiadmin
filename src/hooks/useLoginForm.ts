@@ -21,7 +21,7 @@ export const useLoginForm = () => {
  useEffect(() => {
   const token = localStorage.getItem('user');
   if (token) {
-   router.push('/dashboard');
+   router.push('/');
   }
  }, [router]);
 
