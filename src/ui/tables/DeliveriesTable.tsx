@@ -1,4 +1,4 @@
-import { appUrl } from '@/libs/Constants';
+import { dashboardUrl } from '@/libs/Constants';
 import { useQuery, QueryKey, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -15,8 +15,20 @@ interface Delivery {
   packageName: string;
   packageType: string;
   status: string;
-  anount: string;
+  amount: string;
   deliveryRider: string;
+  deliveryRiderNumber: string;
+  deliveryTime: string;
+  vehicleType: string;
+  paymentStatus: string;
+  user: {
+    name: string;
+  };
+  rider: {
+    user: {
+      companyName: string;
+    };
+  };
 }
 
 interface DeliveriesTableprops {}
@@ -30,9 +42,15 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
   const { data, isLoading, isError } = useQuery(
     ['deliveries', currentPage],
     () =>
-      fetch(`${appUrl}/api/delivery/all?page=${currentPage}&size=10`)
+      fetch(
+        `${dashboardUrl}/api/delivery/mobile/all?page=${currentPage}&size=10`
+      )
         .then((response) => response.json())
         .then((data) => data)
+  );
+
+  toast.info(
+    "Note that the fields 'Company Name' marked as 'N/A' means it was facilitated by an independent rider."
   );
 
   const deliveries: Delivery[] = data?.content ?? [];
@@ -119,17 +137,52 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
                               scope='col'
                               className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                             >
+                              Customer
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Amount
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
                               Status
                             </th>
                             <th
                               scope='col'
                               className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                             >
-                              Actions
+                              Timestamp
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Company Name
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Vehicle
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Rider No
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Payment Status
                             </th>
                           </tr>
                         </thead>
-
                         <tbody className='divide-y divide-basicDark bg-darkTheme'>
                           {deliveriesSkeletonRows}
                         </tbody>
@@ -188,13 +241,49 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
                                 scope='col'
                                 className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                               >
+                                Customer
+                              </th>
+                              <th
+                                scope='col'
+                                className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                              >
+                                Amount
+                              </th>
+                              <th
+                                scope='col'
+                                className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                              >
                                 Status
                               </th>
                               <th
                                 scope='col'
                                 className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                               >
-                                Actions
+                                Timestamp
+                              </th>
+                              <th
+                                scope='col'
+                                className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                              >
+                                Company Name
+                              </th>
+                              <th
+                                scope='col'
+                                className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                              >
+                                Vehicle
+                              </th>
+                              <th
+                                scope='col'
+                                className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                              >
+                                Rider No
+                              </th>
+                              <th
+                                scope='col'
+                                className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                              >
+                                Payment Status
                               </th>
                             </tr>
                           </thead>
@@ -255,32 +344,118 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
                                     </div>
                                   </div>
                                 </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                        {delivery.user.name}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                        ₦{delivery.amount}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
                                 <>
                                   <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
                                     <div className='flex items-center'>
                                       <div className='ml-1'>
                                         <div className='font-medium text-white'>
-                                          {delivery.status === 'CANCELLED' ? (
-                                            <Status color='red'>
-                                              Not Approved
-                                            </Status>
-                                          ) : delivery.status === 'PENDING' ||
-                                            delivery.status ===
-                                              'IN_PROGRESS' ? (
+                                          {delivery?.status === 'PENDING' && (
                                             <Status color='yellow'>
                                               Pending
                                             </Status>
-                                          ) : delivery.status ===
-                                            'DELIVERED' ? (
-                                            <Status color='green'>
-                                              Delivered
+                                          )}
+                                          {delivery?.status ===
+                                            'IN_PROGRESS' && (
+                                            <Status color='yellow'>
+                                              In Progress
                                             </Status>
-                                          ) : null}
+                                          )}
+                                          {delivery?.status === 'PICKED_UP' && (
+                                            <Status color='yellow'>
+                                              Picked Up
+                                            </Status>
+                                          )}
+                                          {delivery?.status === 'CANCELLED' && (
+                                            <Status color='red'>
+                                              Cancelled
+                                            </Status>
+                                          )}
+                                          {delivery?.status === 'COMPLETED' && (
+                                            <Status color='green'>
+                                              Completed
+                                            </Status>
+                                          )}
                                         </div>
                                       </div>
                                     </div>
                                   </td>
                                   <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                    <div className='flex items-center'>
+                                      <div className='ml-1'>
+                                        <div className='font-medium text-white'>
+                                          {delivery.deliveryTime}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                    <div className='flex items-center'>
+                                      <div className='ml-1'>
+                                        <div className='font-medium text-white'>
+                                          {delivery.rider?.user.companyName ? (
+                                            <span>
+                                              {delivery.rider.user.companyName}
+                                            </span>
+                                          ) : (
+                                            <span>N/A</span>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                    <div className='flex items-center'>
+                                      <div className='ml-1'>
+                                        <div className='font-medium text-white'>
+                                          {delivery.vehicleType}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                    <div className='flex items-center'>
+                                      <div className='ml-1'>
+                                        <div className='font-medium text-white'>
+                                          {delivery.deliveryRiderNumber}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                    <div className='flex items-center'>
+                                      <div className='ml-1'>
+                                        <div className='font-medium text-white'>
+                                          {delivery.paymentStatus ===
+                                          'PAYMENT_FALIED' ? (
+                                            <Status color='red'>Failed</Status>
+                                          ) : (
+                                            <Status color='green'>
+                                              Success
+                                            </Status>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  {/* <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
                                     <div className='flex items-center'>
                                       <div className='ml-1'>
                                         <div
@@ -293,7 +468,7 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
                                         </div>
                                       </div>
                                     </div>
-                                  </td>
+                                  </td> */}
                                 </>
                               </tr>
                             ))}

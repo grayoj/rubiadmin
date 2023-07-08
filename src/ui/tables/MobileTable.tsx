@@ -6,7 +6,7 @@ import { useQuery, QueryKey, useQueryClient } from '@tanstack/react-query';
 import { mobileSkeletonRows } from './TableSkeleton';
 import { toast } from 'react-toastify';
 import { Button } from '../buttons/Button';
-import { appUrl } from '@/libs/Constants';
+import { dashboardUrl } from '@/libs/Constants';
 
 export interface User {
   id: number;
@@ -19,7 +19,9 @@ export interface User {
 export const fetchUsers = async (
   page: number
 ): Promise<{ content: User[]; totalPages: any }> => {
-  const response = await fetch(`${appUrl}/user/users?page=${page}&size=10`);
+  const response = await fetch(
+    `${dashboardUrl}/api/user/mobile/users?page=${page}&size=10`
+  );
   const data = await response.json();
   return data;
 };
@@ -105,7 +107,7 @@ export const MobileTable: React.FC = () => {
                         </th>
                         <th
                           scope='col'
-                          className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                          className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                         >
                           Email
                         </th>

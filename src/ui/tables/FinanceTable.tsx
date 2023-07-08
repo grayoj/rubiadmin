@@ -1,4 +1,4 @@
-import { appUrl } from '@/libs/Constants';
+import { dashboardUrl } from '@/libs/Constants';
 import { useQuery, QueryKey, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -8,20 +8,7 @@ import { financeSkeletonRows } from './TableSkeleton';
 import { Button } from '../buttons/Button';
 import { Status } from '../status/Status';
 import Link from 'next/link';
-
-interface Finance {
-  id: number;
-  referenceCode: string;
-  amount: string;
-  response: string;
-  paidAt: string;
-  companyName: string;
-  channel: string;
-  customerName: string;
-  riderName: string;
-  timestamp: string;
-  status: string;
-}
+import { Finance } from '@/types/FinanceTypes';
 
 interface FinanceTableprops {}
 
@@ -32,7 +19,9 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
   const router = useRouter();
 
   const { data, isLoading, isError } = useQuery(['finance', currentPage], () =>
-    fetch(`${appUrl}/api/finance/all?page=${currentPage}&size=10`)
+    fetch(
+      `${dashboardUrl}/api/delivery/finance/all?page=${currentPage}&size=10`
+    )
       .then((response) => response.json())
       .then((data) => data)
   );
@@ -92,7 +81,31 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                               scope='col'
                               className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                             >
-                              Reference Code
+                              Message
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Authorization Url
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Access Code
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Reference
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Rider Name
                             </th>
                             <th
                               scope='col'
@@ -104,19 +117,13 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                               scope='col'
                               className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                             >
-                              Payment Type
+                              Currency
                             </th>
                             <th
                               scope='col'
                               className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                             >
-                              Timestamp
-                            </th>
-                            <th
-                              scope='col'
-                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
-                            >
-                              Rider Name
+                              Payment Status
                             </th>
                             <th
                               scope='col'
@@ -134,7 +141,7 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                               scope='col'
                               className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                             >
-                              Status
+                              Timestamp
                             </th>
                           </tr>
                         </thead>
@@ -158,33 +165,33 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                             <tr>
                               <th
                                 scope='col'
-                                className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                                className='py-3.5 pl-4 pr-4 text-center text-sm font-semibold text-white sm:pl-6'
                               >
-                                Payment ID
+                                Id
                               </th>
                               <th
                                 scope='col'
                                 className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                               >
-                                Reference Code
+                                Message
                               </th>
                               <th
                                 scope='col'
                                 className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                               >
-                                Amount
+                                Authorization Url
                               </th>
                               <th
                                 scope='col'
                                 className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                               >
-                                Payment Type
+                                Access Code
                               </th>
                               <th
                                 scope='col'
                                 className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                               >
-                                Timestamp
+                                Reference
                               </th>
                               <th
                                 scope='col'
@@ -196,13 +203,13 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                                 scope='col'
                                 className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                               >
-                                Customer Name
+                                Amount
                               </th>
                               <th
                                 scope='col'
                                 className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                               >
-                                Company Name
+                                Currency
                               </th>
                               <th
                                 scope='col'
@@ -210,10 +217,28 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                               >
                                 Status
                               </th>
+                              <th
+                                scope='col'
+                                className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                              >
+                                Customer
+                              </th>
+                              <th
+                                scope='col'
+                                className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                              >
+                                Company
+                              </th>
+                              <th
+                                scope='col'
+                                className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                              >
+                                Timestamp
+                              </th>
                             </tr>
                           </thead>
                           <tbody className='divide-y divide-basicDark bg-darkTheme'>
-                            {data?.content.map((finance: Finance) => (
+                            {data?.content?.map((finance: Finance) => (
                               <tr>
                                 <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
                                   <div className='flex items-center'>
@@ -228,7 +253,49 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                                   <div className='flex items-center'>
                                     <div className='ml-1'>
                                       <div className='font-medium text-white'>
-                                        {finance.referenceCode}
+                                        {finance.message}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                        {finance.authorizationUrl}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                        {finance.accessCode}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                        {finance.reference}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                        {finance.delivery?.deliveryRider ? (
+                                          <span>
+                                            {finance.delivery.deliveryRider}
+                                          </span>
+                                        ) : (
+                                          <span>Unassigned</span>
+                                        )}
                                       </div>
                                     </div>
                                   </div>
@@ -246,43 +313,7 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                                   <div className='flex items-center'>
                                     <div className='ml-1'>
                                       <div className='font-medium text-white'>
-                                        {finance.channel}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                                  <div className='flex items-center'>
-                                    <div className='ml-1'>
-                                      <div className='font-medium text-white'>
-                                        {finance.timestamp}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                                  <div className='flex items-center'>
-                                    <div className='ml-1'>
-                                      <div className='font-medium text-white'>
-                                        {finance.riderName}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                                  <div className='flex items-center'>
-                                    <div className='ml-1'>
-                                      <div className='font-medium text-white'>
-                                        {finance.customerName}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                                  <div className='flex items-center'>
-                                    <div className='ml-1'>
-                                      <div className='font-medium text-white'>
-                                        {finance.companyName}
+                                        NGN
                                       </div>
                                     </div>
                                   </div>
@@ -292,16 +323,61 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                                     <div className='flex items-center'>
                                       <div className='ml-1'>
                                         <div className='font-medium text-white'>
-                                          {finance.status === 'CANCELLED' ? (
+                                          {finance.delivery?.paymentStatus ===
+                                          'PAYMENT_FALIED' ? (
                                             <Status color='red'>Failed</Status>
-                                          ) : finance.status === 'PENDING' ||
-                                            finance.status === 'IN_PROGRESS' ? (
-                                            <Status color='yellow'>
-                                              Pending
+                                          ) : (
+                                            <Status color='green'>
+                                              Success
                                             </Status>
-                                          ) : finance.status === 'PAID' ? (
-                                            <Status color='green'>Paid</Status>
-                                          ) : null}
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                    <div className='flex items-center'>
+                                      <div className='ml-1'>
+                                        <div className='font-medium text-white'>
+                                          {finance.delivery?.user.name ? (
+                                            <span>
+                                              {finance.delivery?.user.name}
+                                            </span>
+                                          ) : (
+                                            <span>N/A</span>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                    <div className='flex items-center'>
+                                      <div className='ml-1'>
+                                        <div className='font-medium text-white'>
+                                          {finance.delivery?.rider?.user
+                                            .companyName ? (
+                                            <span>
+                                              {
+                                                finance.delivery.rider?.user
+                                                  .companyName
+                                              }
+                                            </span>
+                                          ) : (
+                                            <span>N/A</span>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                    <div className='flex items-center'>
+                                      <div className='ml-1'>
+                                        <div className='font-medium text-white'>
+                                          {finance?.createdAt ? (
+                                            <span>{finance?.createdAt}</span>
+                                          ) : (
+                                            <span>N/A</span>
+                                          )}
                                         </div>
                                       </div>
                                     </div>

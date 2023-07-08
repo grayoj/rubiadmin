@@ -5,7 +5,7 @@ import { useQuery, QueryKey, useQueryClient } from '@tanstack/react-query';
 import { ridersIndependentSkeletonRows } from './TableSkeleton';
 import { toast } from 'react-toastify';
 import { Button } from '../buttons/Button';
-import { appUrl } from '@/libs/Constants';
+import { appUrl, dashboardUrl } from '@/libs/Constants';
 
 export interface Rider {
   id: number;
@@ -14,12 +14,17 @@ export interface Rider {
   username: string;
   phone: string;
   account: string;
+  user: {
+    accountNumber: string;
+  };
 }
 
 export const fetchRiders = async (
   page: number
 ): Promise<{ content: Rider[]; totalPages: any }> => {
-  const response = await fetch(`${appUrl}/user/users?page=${page}&size=10`);
+  const response = await fetch(
+    `${dashboardUrl}/api/user/riders/all?page=${page}&size=10`
+  );
   const data = await response.json();
   return data;
 };
@@ -54,7 +59,7 @@ export const IndependentRidersTable: React.FC = () => {
   };
 
   if (isError) {
-    toast.error('Failed to fetch Corporate Riders', {
+    toast.error('Failed to fetch Independent Riders', {
       autoClose: 2000,
     });
   }
@@ -184,9 +189,9 @@ export const IndependentRidersTable: React.FC = () => {
                             scope='col'
                             className='px-3 py-3.5 text-left text-sm font-semibold text-white'
                           >
-                            Account
+                            Account Number
                           </th>
-                          <th
+                          {/* <th
                             scope='col'
                             className='px-3 py-3.5 text-left text-sm font-semibold text-white'
                           >
@@ -214,7 +219,7 @@ export const IndependentRidersTable: React.FC = () => {
                             ) : (
                               <b>Actions</b>
                             )}
-                          </th>
+                          </th> */}
                         </tr>
                       </thead>
                       <tbody className='divide-y divide-basicDark bg-darkTheme'>
@@ -269,12 +274,12 @@ export const IndependentRidersTable: React.FC = () => {
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div className='font-medium text-white'>
-                                    {rider.account}
+                                    {rider?.account}
                                   </div>
                                 </div>
                               </div>
                             </td>
-                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                            {/* <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div
@@ -285,7 +290,7 @@ export const IndependentRidersTable: React.FC = () => {
                                   </div>
                                 </div>
                               </div>
-                            </td>
+                            </td> */}
                           </tr>
                         ))}
                       </tbody>

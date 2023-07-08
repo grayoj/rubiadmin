@@ -1,9 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FareModal } from './modals/FareModal';
 import { Button } from './buttons/Button';
+import { dashboardUrl } from '@/libs/Constants';
+import axios from 'axios';
+import { Spinner } from './Spinner';
+
+interface FareManagement {
+  id: number;
+  amount: string;
+  timestamp: string;
+}
 
 export const Fare: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fareManagement, setFareManagement] = useState<FareManagement | null>(
+    null
+  );
+
+  useEffect(() => {
+    axios
+      .get(`${dashboardUrl}/api/user/users/fare`)
+      .then((response) => {
+        setFareManagement(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching Fare Management:', error);
+      });
+  }, []);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -31,7 +54,20 @@ export const Fare: React.FC = () => {
         </div>
         <div className='mb-2 flex justify-between border-b border-darkTheme py-2 text-sm sm:text-base'>
           <div className='flex flex-col items-center'>
-            <p className='text-white mb-1 text-xl font-extrabold'>N200.00</p>
+            {fareManagement ? (
+              <div>
+                <p className='text-white mb-1 text-md font-extrabold'>
+                  ₦{fareManagement?.amount}
+                </p>
+                <p className='text-white mb-1 text-md font-extrabold'>
+                  Updated At: {fareManagement?.timestamp}
+                </p>
+              </div>
+            ) : (
+              <div className='flex mx-auto items-center justify-center'>
+                <Spinner />
+              </div>
+            )}
           </div>
         </div>
         <div className='my-8 mx-auto flex justify-center items-center'>

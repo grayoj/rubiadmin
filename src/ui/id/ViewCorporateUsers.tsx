@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Spinner } from '@/ui/Spinner';
 import { Status } from '@/ui/status/Status';
-import { appUrl, dashboardUrl } from '@/libs/Constants';
+import { dashboardUrl } from '@/libs/Constants';
 
 interface User {
   id: string;
@@ -37,13 +37,13 @@ export const ViewCorporateUsers: React.FC<ViewCorporateUsersProps> = () => {
     error: userError,
   } = useQuery(['user', id], () =>
     axios
-      .get(`${appUrl}/api/user/users/${id}`)
+      .get(`${dashboardUrl}/api/user/users/${id}`)
       .then((response) => response.data)
   );
 
   const deleteUser = (id: string) => {
     axios
-      .delete(`${appUrl}/api/user/users/${id}`)
+      .delete(`${dashboardUrl}/api/user/users/${id}`)
       .then((response) => {
         if (response.status !== 200) {
           throw new Error('Failed to delete user');
@@ -80,8 +80,8 @@ export const ViewCorporateUsers: React.FC<ViewCorporateUsersProps> = () => {
     updateUserStatus(id, 'APPROVED');
   };
 
-  const handleNotApprove = (id: string) => {
-    updateUserStatus(id, 'NOT_APPROVED');
+  const handleDisabled = (id: string) => {
+    updateUserStatus(id, 'DISABLED');
   };
 
   return (
@@ -156,7 +156,7 @@ export const ViewCorporateUsers: React.FC<ViewCorporateUsersProps> = () => {
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
                             Company Mail
                           </th>
@@ -176,13 +176,25 @@ export const ViewCorporateUsers: React.FC<ViewCorporateUsersProps> = () => {
                             scope='col'
                             className='px-3 py-3.5 text-left text-sm font-semibold text-white'
                           >
-                            No of Riders
+                            Rider No
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
                             Status
+                          </th>
+                          <th
+                            scope='col'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
+                          >
+                            Account No
+                          </th>
+                          <th
+                            scope='col'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
+                          >
+                            Bank Name
                           </th>
                         </tr>
                       </thead>
@@ -192,7 +204,7 @@ export const ViewCorporateUsers: React.FC<ViewCorporateUsersProps> = () => {
                             <div className='flex items-center'>
                               <div className='ml-1'>
                                 <div className='font-medium text-white cursor-pointer px-2 py-2 rounded-lg'>
-                                  RUB{user.id}
+                                  RUB{user?.id}
                                 </div>
                               </div>
                             </div>
@@ -275,6 +287,24 @@ export const ViewCorporateUsers: React.FC<ViewCorporateUsersProps> = () => {
                               </div>
                             </td>
                           </>
+                          <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                            <div className='flex items-center'>
+                              <div className='ml-1'>
+                                <div className='font-medium text-white'>
+                                  {user.accountNumber}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                            <div className='flex items-center'>
+                              <div className='ml-1'>
+                                <div className='font-medium text-white'>
+                                  {user.bankName}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -282,23 +312,35 @@ export const ViewCorporateUsers: React.FC<ViewCorporateUsersProps> = () => {
                 </div>
                 <div className='mt-4 text-white font-bold'>
                   Available actions
-                </div>
-                <div className='pr-5 py-4'>
-                  {user?.status === 'APPROVED' ? (
-                    <button
-                      onClick={() => handleNotApprove(user.id)}
-                      className='mx-4 inline-flex items-center justify-center rounded-md border border-transparent bg-productYellow px-4 py-2 text-sm font-medium text-white shadow-sm sm:w-auto'
-                    >
-                      Disable Account
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleApprove(user.id)}
-                      className='mx-4 inline-flex items-center justify-center rounded-md border border-transparent bg-productYellow px-4 py-2 text-sm font-medium text-white shadow-sm sm:w-auto'
-                    >
-                      Approve Account
-                    </button>
-                  )}
+                  <div className='py-4'>
+                    {user?.status === 'APPROVED' || 'ENABLED' ? (
+                      <button className='mx-4 cursor-not-allowed bg-productGreen inline-flex items-center justify-center rounded-md border border-transparent bg-product px-4 py-2 text-sm font-medium text-white shadow-sm sm:w-auto'>
+                        Approve Account
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleApprove(user.id)}
+                        className='mx-4 inline-flex items-center justify-center rounded-md border border-transparent bg-productGreen px-4 py-2 text-sm font-medium text-white shadow-sm sm:w-auto'
+                      >
+                        Approve Account
+                      </button>
+                    )}
+                    {user?.status === 'ENABLED' || 'APPROVED' ? (
+                      <button
+                        onClick={() => handleDisabled(user.id)}
+                        className='mx-4 inline-flex items-center justify-center rounded-md border border-transparent bg-productYellow px-4 py-2 text-sm font-medium text-white shadow-sm sm:w-auto'
+                      >
+                        Disable Account
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleApprove(user.id)}
+                        className='mx-4 inline-flex items-center justify-center rounded-md border border-transparent bg-productGreen px-4 py-2 text-sm font-medium text-white shadow-sm sm:w-auto'
+                      >
+                        Enable Account
+                      </button>
+                    )}
+                  </div>
                 </div>
                 {userLoading ? (
                   <div

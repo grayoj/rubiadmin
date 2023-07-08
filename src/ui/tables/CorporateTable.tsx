@@ -20,6 +20,9 @@ export interface User {
   riderNumber: string;
   status: string;
   streetAddress: string;
+  companyState: string;
+  accountNumber: string;
+  bankName: string;
 }
 
 export const fetchUsers = async (
@@ -102,7 +105,7 @@ export const CorporateTable: React.FC = () => {
                           scope='col'
                           className='px-3 py-3.5 text-left text-sm font-semibold text-white'
                         >
-                          Account ID
+                          Account
                         </th>
                         <th
                           scope='col'
@@ -144,13 +147,25 @@ export const CorporateTable: React.FC = () => {
                           scope='col'
                           className='px-3 py-3.5 text-left text-sm font-semibold text-white'
                         >
-                          No of Riders
+                          Rider No
                         </th>
                         <th
                           scope='col'
                           className='px-3 py-3.5 text-left text-sm font-semibold text-white'
                         >
                           Status
+                        </th>
+                        <th
+                          scope='col'
+                          className='px-3 py-3.5 text-center text-sm font-semibold text-white'
+                        >
+                          Account No
+                        </th>
+                        <th
+                          scope='col'
+                          className='px-3 py-3.5 text-center text-sm font-semibold text-white'
+                        >
+                          Bank Name
                         </th>
                         <th
                           scope='col'
@@ -181,19 +196,19 @@ export const CorporateTable: React.FC = () => {
                         <tr>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
-                            Account ID
+                            Account
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
-                            Company Name
+                            Company
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-6 py-3.5 text-center text-sm font-semibold text-white'
                           >
                             CAC Number
                           </th>
@@ -205,13 +220,13 @@ export const CorporateTable: React.FC = () => {
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
                             Company Mail
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
                             Company State
                           </th>
@@ -223,19 +238,31 @@ export const CorporateTable: React.FC = () => {
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
-                            No of Riders
+                            Riders No
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
                             Status
                           </th>
                           <th
                             scope='col'
-                            className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
+                          >
+                            Account No
+                          </th>
+                          <th
+                            scope='col'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
+                          >
+                            Bank Name
+                          </th>
+                          <th
+                            scope='col'
+                            className='py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-white sm:pl-6'
                           >
                             Actions
                           </th>
@@ -293,6 +320,15 @@ export const CorporateTable: React.FC = () => {
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div className='font-medium text-white'>
+                                    {user.companyState}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                              <div className='flex items-center'>
+                                <div className='ml-1'>
+                                  <div className='font-medium text-white'>
                                     {user.streetAddress}
                                   </div>
                                 </div>
@@ -323,11 +359,29 @@ export const CorporateTable: React.FC = () => {
                             <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
                               <div className='flex items-center'>
                                 <div className='ml-1'>
+                                  <div className='font-medium text-white'>
+                                    {user.accountNumber}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                              <div className='flex items-center'>
+                                <div className='ml-1'>
+                                  <div className='font-medium text-white'>
+                                    {user.bankName}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                              <div className='flex items-center'>
+                                <div className='ml-1'>
                                   <div
-                                    className='font-medium text-white bg-productGreen py-1 px-2 rounded-md cursor-pointer'
+                                    className='font-medium text-white py-1 px-2 rounded-md cursor-pointer'
                                     onClick={() => handleEditClick(user.id)}
                                   >
-                                    <ArrowUpRightIcon />
+                                    <ArrowUpRightIcon className='text-white h-4 w-4' />
                                   </div>
                                 </div>
                               </div>

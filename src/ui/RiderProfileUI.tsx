@@ -3,11 +3,13 @@ import { Button } from './buttons/Button';
 import { useRouter } from 'next/router';
 import { avatarUrl, dashboardUrl } from '@/libs/Constants';
 import { QueryKey, useQueryClient, useQuery } from '@tanstack/react-query';
+import { Loader } from './Loader';
+import { Spinner } from './Spinner';
 
 interface RiderProfileUIProps {}
 
 export const fetchRiderById = async (id: number) => {
-  const response = await fetch(`${dashboardUrl}/user/users/${id}`);
+  const response = await fetch(`${dashboardUrl}/api/user/riders/all/${id}`);
   const data = await response.json();
   return data;
 };
@@ -20,6 +22,7 @@ export const RiderProfileUI: React.FC<RiderProfileUIProps> = () => {
     data: rider,
     isLoading,
     isError,
+    refetch, // Add refetch function to manually trigger data refetching
   } = useQuery<any, Error>(['rider', id], () => fetchRiderById(Number(id)));
 
   const navigate = async () => {
@@ -56,6 +59,28 @@ export const RiderProfileUI: React.FC<RiderProfileUIProps> = () => {
     );
   }
 
+  if (isLoading) {
+    return (
+      <div className='py-10'>
+        <div>
+          <div className='m-4 mx-auto flex flex-col items-center justify-center'>
+            <div className='text-white text-lg text-center mb-4'>
+              <Spinner />
+            </div>
+            <div className='flex space-x-4'>
+              <Button onClick={() => {}} disabled={true}>
+                Try Again
+              </Button>
+              <Button onClick={() => router.back()} disabled={false}>
+                Go Back
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className='bg-gray-200 py-8'>
       <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -77,17 +102,27 @@ export const RiderProfileUI: React.FC<RiderProfileUIProps> = () => {
                   alt='Profile Thumbnail'
                 />
                 <div className='ml-4'>
-                  <h4 className='text-lg font-medium text-white'>Name:</h4>
-                  <p className='text-sm text-white'>Email:</p>
+                  <h4 className='text-lg font-medium text-white'>
+                    Name: {rider.name}
+                  </h4>
+                  <p className='text-sm text-white'>Email: {rider.email}</p>
                 </div>
               </div>
             </div>
           </div>
           <div className='px-5'>
-            <p className='text-sm font-medium text-white'>Company Name:</p>
-            <p className='text-sm font-medium text-white'>Username:</p>
-            <p className='text-sm font-medium text-white'>Phone Number:</p>
-            <p className='text-sm font-medium text-white'>Company Account:</p>
+            <p className='text-sm font-medium text-white'>
+              Company Name: {rider?.user?.companyName}
+            </p>
+            <p className='text-sm font-medium text-white'>
+              Username: {rider.username}
+            </p>
+            <p className='text-sm font-medium text-white'>
+              Phone Number: {rider.phone}
+            </p>
+            <p className='text-sm font-medium text-white'>
+              Company Account: {rider?.user?.accountNumber}
+            </p>
           </div>
           <div className='px-4 pt-4'>
             <Button onClick={navigate} disabled={false}>

@@ -5,7 +5,7 @@ import { useQuery, QueryKey, useQueryClient } from '@tanstack/react-query';
 import { ridersCorporateSkeletonRows } from './TableSkeleton';
 import { toast } from 'react-toastify';
 import { Button } from '../buttons/Button';
-import { appUrl } from '@/libs/Constants';
+import { dashboardUrl } from '@/libs/Constants';
 
 export interface Rider {
   id: number;
@@ -13,14 +13,19 @@ export interface Rider {
   email: string;
   username: string;
   phone: string;
-  companyName: string;
-  companyAccount: string;
+  user: {
+    companyName: string;
+    accountNumber: string;
+    bankName: string;
+  };
 }
 
 export const fetchRiders = async (
   page: number
 ): Promise<{ content: Rider[]; totalPages: any }> => {
-  const response = await fetch(`${appUrl}/user/users?page=${page}&size=10`);
+  const response = await fetch(
+    `${dashboardUrl}/api/user/riders/all?page=${page}&size=10`
+  );
   const data = await response.json();
   return data;
 };
@@ -282,7 +287,7 @@ export const CorporateRidersTable: React.FC = () => {
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div className='font-medium text-white'>
-                                    {rider.companyName}
+                                    {rider.user.companyName}
                                   </div>
                                 </div>
                               </div>
@@ -291,7 +296,7 @@ export const CorporateRidersTable: React.FC = () => {
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div className='font-medium text-white'>
-                                    {rider.companyAccount}
+                                    {rider.user.accountNumber}
                                   </div>
                                 </div>
                               </div>

@@ -39,7 +39,7 @@ export const sidebarItems = [
     children: [
       { name: "User Management", href: "/management/users" },
       { name: "Fare Management", href: "/management/fare" },
-      { name: "Promo Codes", href: "/management/codes" },
+      // { name: "Promo Codes", href: "/management/codes" },
     ],
   },
   {

@@ -4,27 +4,14 @@ import * as React from 'react';
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
-import { appUrl } from '@/libs/Constants';
+import { dashboardUrl } from '@/libs/Constants';
 import { financeSkeletonRows } from './TableSkeleton';
 import { Button } from '../buttons/Button';
 import { SearchInput } from '../inputs/SearchInput';
 import { Status } from '../status/Status';
+import { Finance } from '@/types/FinanceTypes';
 
 interface FinanceSearchTableProps {}
-
-interface Finance {
-  id: number;
-  referenceCode: string;
-  amount: string;
-  response: string;
-  paidAt: string;
-  companyName: string;
-  channel: string;
-  customerName: string;
-  riderName: string;
-  timestamp: string;
-  status: string;
-}
 
 export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -41,11 +28,7 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
   const { data, isLoading, isError } = useQuery<
     { content: Finance[]; totalPages: any },
     Error
-  >(queryKey, () => fetchUsers(currentPage));
-
-  const handleEditClick = (id: number) => {
-    router.push(`/customers/mobile/${id}`);
-  };
+  >(queryKey, () => fetchFinance(currentPage));
 
   const handlePageClick = ({ selected }: { selected: number }) => {
     setCurrentPage(selected);
@@ -55,9 +38,9 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
     queryClient.invalidateQueries(queryKey);
   };
 
-  const fetchUsers = async (page: number) => {
+  const fetchFinance = async (page: number) => {
     const response = await fetch(
-      `${appUrl}/api/users?page=${page}&search=${searchQuery}`
+      `${dashboardUrl}/api/delivery/finance/all?page=${page}&search=${searchQuery}`
     );
     if (!response.ok) {
       throw new Error('Failed to fetch payments');
@@ -67,7 +50,7 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
 
   const filteredUsers = searchQuery
     ? data?.content.filter((finance) =>
-        finance.referenceCode.toLowerCase().includes(searchQuery.toLowerCase())
+        finance.reference?.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : data?.content;
 
@@ -91,7 +74,7 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
                 Search Through <strong>Payments Made</strong> on the Rubi
                 Logistics platform.{' '}
                 <Link href='/finance/payments'>
-                  <u>Go Back</u>
+                  <u>Go Back</u> or Use <u>Full Search</u>
                 </Link>
               </p>
             </div>
@@ -99,7 +82,7 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
               <SearchInput
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder='Search Payments'
+                placeholder='Search by Ref Code'
               />
             </div>
           </div>
@@ -115,33 +98,33 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
                       <tr>
                         <th
                           scope='col'
-                          className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                          className='py-3.5 pl-4 pr-4 text-center text-sm font-semibold text-white sm:pl-6'
                         >
-                          Payment ID
+                          Id
                         </th>
                         <th
                           scope='col'
                           className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                         >
-                          Reference Code
+                          Message
                         </th>
                         <th
                           scope='col'
                           className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                         >
-                          Amount
+                          Authorization Url
                         </th>
                         <th
                           scope='col'
                           className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                         >
-                          Payment Type
+                          Access Code
                         </th>
                         <th
                           scope='col'
                           className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                         >
-                          Timestamp
+                          Reference
                         </th>
                         <th
                           scope='col'
@@ -153,19 +136,37 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
                           scope='col'
                           className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                         >
-                          Customer Name
+                          Amount
                         </th>
                         <th
                           scope='col'
                           className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                         >
-                          Company Name
+                          Currency
                         </th>
                         <th
                           scope='col'
                           className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                         >
                           Status
+                        </th>
+                        <th
+                          scope='col'
+                          className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                        >
+                          Customer
+                        </th>
+                        <th
+                          scope='col'
+                          className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                        >
+                          Company
+                        </th>
+                        <th
+                          scope='col'
+                          className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                        >
+                          Timestamp
                         </th>
                       </tr>
                     </thead>
@@ -189,33 +190,33 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
                         <tr>
                           <th
                             scope='col'
-                            className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            className='py-3.5 pl-4 pr-4 text-center text-sm font-semibold text-white sm:pl-6'
                           >
-                            Payment ID
+                            Id
                           </th>
                           <th
                             scope='col'
                             className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                           >
-                            Reference Code
+                            Message
                           </th>
                           <th
                             scope='col'
                             className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                           >
-                            Amount
+                            Authorization Url
                           </th>
                           <th
                             scope='col'
                             className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                           >
-                            Payment Type
+                            Access Code
                           </th>
                           <th
                             scope='col'
                             className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                           >
-                            Timestamp
+                            Reference
                           </th>
                           <th
                             scope='col'
@@ -227,13 +228,13 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
                             scope='col'
                             className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                           >
-                            Customer Name
+                            Amount
                           </th>
                           <th
                             scope='col'
                             className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                           >
-                            Company Name
+                            Currency
                           </th>
                           <th
                             scope='col'
@@ -241,102 +242,173 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
                           >
                             Status
                           </th>
+                          <th
+                            scope='col'
+                            className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                          >
+                            Customer
+                          </th>
+                          <th
+                            scope='col'
+                            className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                          >
+                            Company
+                          </th>
+                          <th
+                            scope='col'
+                            className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                          >
+                            Timestamp
+                          </th>
                         </tr>
                       </thead>
                       <tbody className='divide-y divide-basicDark bg-darkTheme'>
                         {filteredUsers?.map((finance) => (
-                          <tr>
-                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                              <div className='flex items-center'>
-                                <div className='ml-1'>
-                                  <div className='font-medium text-white cursor-pointer px-2 py-2 rounded-lg'>
-                                    RUB{finance.id}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                              <div className='flex items-center'>
-                                <div className='ml-1'>
-                                  <div className='font-medium text-white'>
-                                    {finance.referenceCode}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                              <div className='flex items-center'>
-                                <div className='ml-1'>
-                                  <div className='font-medium text-white'>
-                                    {finance.amount}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                              <div className='flex items-center'>
-                                <div className='ml-1'>
-                                  <div className='font-medium text-white'>
-                                    {finance.channel}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                              <div className='flex items-center'>
-                                <div className='ml-1'>
-                                  <div className='font-medium text-white'>
-                                    {finance.timestamp}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                              <div className='flex items-center'>
-                                <div className='ml-1'>
-                                  <div className='font-medium text-white'>
-                                    {finance.riderName}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                              <div className='flex items-center'>
-                                <div className='ml-1'>
-                                  <div className='font-medium text-white'>
-                                    {finance.customerName}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
-                              <div className='flex items-center'>
-                                <div className='ml-1'>
-                                  <div className='font-medium text-white'>
-                                    {finance.companyName}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <>
+                          <>
+                            <tr>
                               <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
                                 <div className='flex items-center'>
                                   <div className='ml-1'>
-                                    <div className='font-medium text-white'>
-                                      {finance.status === 'CANCELLED' ? (
-                                        <Status color='red'>Failed</Status>
-                                      ) : finance.status === 'PENDING' ||
-                                        finance.status === 'IN_PROGRESS' ? (
-                                        <Status color='yellow'>Pending</Status>
-                                      ) : finance.status === 'PAID' ? (
-                                        <Status color='green'>Paid</Status>
-                                      ) : null}
+                                    <div className='font-medium text-white cursor-pointer px-2 py-2 rounded-lg'>
+                                      RUB{finance.id}
                                     </div>
                                   </div>
                                 </div>
                               </td>
-                            </>
-                          </tr>
+                              <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                <div className='flex items-center'>
+                                  <div className='ml-1'>
+                                    <div className='font-medium text-white'>
+                                      {finance.message}
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                <div className='flex items-center'>
+                                  <div className='ml-1'>
+                                    <div className='font-medium text-white'>
+                                      {finance.authorizationUrl}
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                <div className='flex items-center'>
+                                  <div className='ml-1'>
+                                    <div className='font-medium text-white'>
+                                      {finance.accessCode}
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                <div className='flex items-center'>
+                                  <div className='ml-1'>
+                                    <div className='font-medium text-white'>
+                                      {finance.reference}
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                <div className='flex items-center'>
+                                  <div className='ml-1'>
+                                    <div className='font-medium text-white'>
+                                      {finance.delivery?.deliveryRider ? (
+                                        <span>
+                                          {finance.delivery.deliveryRider}
+                                        </span>
+                                      ) : (
+                                        <span>Unassigned</span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                <div className='flex items-center'>
+                                  <div className='ml-1'>
+                                    <div className='font-medium text-white'>
+                                      {finance.amount}
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                <div className='flex items-center'>
+                                  <div className='ml-1'>
+                                    <div className='font-medium text-white'>
+                                      NGN
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                        {finance.delivery?.paymentStatus ===
+                                        'PAYMENT_FALIED' ? (
+                                          <Status color='red'>Failed</Status>
+                                        ) : (
+                                          <Status color='green'>Success</Status>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                        {finance.delivery?.user.name ? (
+                                          <span>
+                                            {finance.delivery?.user.name}
+                                          </span>
+                                        ) : (
+                                          <span>N/A</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                        {finance.delivery?.rider?.user
+                                          .companyName ? (
+                                          <span>
+                                            {
+                                              finance.delivery.rider?.user
+                                                .companyName
+                                            }
+                                          </span>
+                                        ) : (
+                                          <span>N/A</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                        {finance?.createdAt ? (
+                                          <span>{finance?.createdAt}</span>
+                                        ) : (
+                                          <span>N/A</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                              </>
+                            </tr>
+                          </>
                         ))}
                       </tbody>
                     </table>

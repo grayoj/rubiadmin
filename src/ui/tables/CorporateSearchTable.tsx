@@ -23,6 +23,9 @@ export interface User {
   riderNumber: string;
   status: string;
   streetAddress: string;
+  accountNumber: string;
+  bankName: string;
+  companyState: string;
 }
 
 export const CorporateSearchTable: React.FC<CorporateSearchTableProps> = () => {
@@ -117,7 +120,7 @@ export const CorporateSearchTable: React.FC<CorporateSearchTableProps> = () => {
                           scope='col'
                           className='px-3 py-3.5 text-left text-sm font-semibold text-white'
                         >
-                          Account ID
+                          Account
                         </th>
                         <th
                           scope='col'
@@ -159,13 +162,25 @@ export const CorporateSearchTable: React.FC<CorporateSearchTableProps> = () => {
                           scope='col'
                           className='px-3 py-3.5 text-left text-sm font-semibold text-white'
                         >
-                          No of Riders
+                          Rider No
                         </th>
                         <th
                           scope='col'
                           className='px-3 py-3.5 text-left text-sm font-semibold text-white'
                         >
                           Status
+                        </th>
+                        <th
+                          scope='col'
+                          className='px-3 py-3.5 text-center text-sm font-semibold text-white'
+                        >
+                          Account No
+                        </th>
+                        <th
+                          scope='col'
+                          className='px-3 py-3.5 text-center text-sm font-semibold text-white'
+                        >
+                          Bank Name
                         </th>
                         <th
                           scope='col'
@@ -196,9 +211,9 @@ export const CorporateSearchTable: React.FC<CorporateSearchTableProps> = () => {
                         <tr>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
-                            Account ID
+                            Account
                           </th>
                           <th
                             scope='col'
@@ -208,7 +223,7 @@ export const CorporateSearchTable: React.FC<CorporateSearchTableProps> = () => {
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
                             CAC Number
                           </th>
@@ -220,33 +235,45 @@ export const CorporateSearchTable: React.FC<CorporateSearchTableProps> = () => {
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
                             Company Mail
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
                             Company State
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
                             Street Address
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
-                            No of Riders
+                            Rider No
                           </th>
                           <th
                             scope='col'
-                            className='px-3 py-3.5 text-left text-sm font-semibold text-white'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
                           >
                             Status
+                          </th>
+                          <th
+                            scope='col'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
+                          >
+                            Account No
+                          </th>
+                          <th
+                            scope='col'
+                            className='px-3 py-3.5 text-center text-sm font-semibold text-white'
+                          >
+                            Bank Name
                           </th>
                           <th
                             scope='col'
@@ -308,6 +335,15 @@ export const CorporateSearchTable: React.FC<CorporateSearchTableProps> = () => {
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div className='font-medium text-white'>
+                                    {user.companyState}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                              <div className='flex items-center'>
+                                <div className='ml-1'>
+                                  <div className='font-medium text-white'>
                                     {user.streetAddress}
                                   </div>
                                 </div>
@@ -338,11 +374,29 @@ export const CorporateSearchTable: React.FC<CorporateSearchTableProps> = () => {
                             <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
                               <div className='flex items-center'>
                                 <div className='ml-1'>
+                                  <div className='font-medium text-white'>
+                                    {user.accountNumber}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                              <div className='flex items-center'>
+                                <div className='ml-1'>
+                                  <div className='font-medium text-white'>
+                                    {user.bankName}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                              <div className='flex items-center'>
+                                <div className='ml-1'>
                                   <div
-                                    className='font-medium text-white bg-productGreen py-1 px-2 rounded-md cursor-pointer'
+                                    className='font-medium text-white py-1 px-2 rounded-md cursor-pointer'
                                     onClick={() => handleEditClick(user.id)}
                                   >
-                                    <ArrowUpRightIcon />
+                                    <ArrowUpRightIcon className='text-white h-4 w-4' />
                                   </div>
                                 </div>
                               </div>

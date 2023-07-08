@@ -3,8 +3,7 @@ import Link from 'next/link';
 import { Person } from 'react-ionicons';
 import { useQuery } from '@tanstack/react-query';
 import { UsersIcon } from '@heroicons/react/24/solid';
-import { appUrl, dashboardUrl } from '@/libs/Constants';
-import { Spinner } from '@/ui/Spinner';
+import { dashboardUrl } from '@/libs/Constants';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -16,7 +15,9 @@ export const DashboardCards: React.FC<DashboardCardProps> = () => {
   const { data: totalUsers, isLoading: isLoadingUsers } = useQuery<number>(
     ['totalUsers'],
     async () => {
-      const response = await fetch(`${appUrl}/user/users/total`);
+      const response = await fetch(
+        `${dashboardUrl}/api/user/mobile/users/total`
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch total users');
       }
@@ -37,7 +38,9 @@ export const DashboardCards: React.FC<DashboardCardProps> = () => {
 
   const { data: totalDeliveries, isLoading: isLoadingDeliveries } =
     useQuery<number>(['totalDeliveries'], async () => {
-      const response = await fetch(`${appUrl}/api/delivery/deliveries/total`);
+      const response = await fetch(
+        `${dashboardUrl}/api/delivery/deliveries/total`
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch total deliveries');
       }

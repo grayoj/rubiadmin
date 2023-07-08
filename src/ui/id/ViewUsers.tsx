@@ -4,7 +4,8 @@ import { Spinner } from '@/ui/Spinner';
 import { Button } from '@/ui/buttons/Button';
 import { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import { appUrl } from '@/libs/Constants';
+import { dashboardUrl } from '@/libs/Constants';
+import { Status } from '../status/Status';
 
 interface ViewUsersProps {}
 
@@ -15,7 +16,7 @@ interface Delivery {
   packageName: string;
   packageType: string;
   status: string;
-  anount: string;
+  amount: string;
 }
 
 export const ViewUsers: React.FC<ViewUsersProps> = () => {
@@ -24,7 +25,9 @@ export const ViewUsers: React.FC<ViewUsersProps> = () => {
   const [showTable, setShowTable] = useState(false);
 
   const { data: user, isLoading: userLoading } = useQuery(['user', id], () =>
-    fetch(`${appUrl}/user/users/${id}`).then((response) => response.json())
+    fetch(`${dashboardUrl}/api/user/mobile/users/${id}`).then((response) =>
+      response.json()
+    )
   );
 
   const {
@@ -32,8 +35,8 @@ export const ViewUsers: React.FC<ViewUsersProps> = () => {
     isLoading: deliveriesLoading,
     refetch: refetchDeliveries,
   } = useQuery(['deliveries', id], () =>
-    fetch(`${appUrl}/api/delivery/deliveries/user/${id}`).then((response) =>
-      response.json()
+    fetch(`${dashboardUrl}/api/delivery/mobile/deliveries/user/${id}`).then(
+      (response) => response.json()
     )
   );
 
@@ -43,7 +46,7 @@ export const ViewUsers: React.FC<ViewUsersProps> = () => {
   };
 
   const handleDeleteUser = (id: any) => {
-    fetch(`${appUrl}/user/users/${id}`, {
+    fetch(`${dashboardUrl}/user/users/${id}`, {
       method: 'DELETE',
     })
       .then((response) => {
@@ -216,7 +219,7 @@ export const ViewUsers: React.FC<ViewUsersProps> = () => {
                   </div>
                 ) : (
                   <div>
-                    {showTable && deliveries.length > 0 && (
+                    {showTable && deliveries?.length > 0 && (
                       <>
                         <div className='mt-4 text-white'>
                           Deliveries made by {user?.name}
@@ -323,7 +326,42 @@ export const ViewUsers: React.FC<ViewUsersProps> = () => {
                                     <div className='flex items-center'>
                                       <div className='ml-1'>
                                         <div className='font-medium text-white'>
-                                          {delivery.status}
+                                          <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                            <div className='flex items-center'>
+                                              <div className='ml-1'>
+                                                {delivery?.status ===
+                                                  'PENDING' && (
+                                                  <Status color='yellow'>
+                                                    Pending
+                                                  </Status>
+                                                )}
+                                                {delivery?.status ===
+                                                  'IN_PROGRESS' && (
+                                                  <Status color='yellow'>
+                                                    In Progress
+                                                  </Status>
+                                                )}
+                                                {delivery?.status ===
+                                                  'PICKED_UP' && (
+                                                  <Status color='yellow'>
+                                                    Picked Up
+                                                  </Status>
+                                                )}
+                                                {delivery?.status ===
+                                                  'CANCELLED' && (
+                                                  <Status color='red'>
+                                                    Cancelled
+                                                  </Status>
+                                                )}
+                                                {delivery?.status ===
+                                                  'COMPLETED' && (
+                                                  <Status color='green'>
+                                                    Completed
+                                                  </Status>
+                                                )}
+                                              </div>
+                                            </div>
+                                          </td>
                                         </div>
                                       </div>
                                     </div>
@@ -332,7 +370,7 @@ export const ViewUsers: React.FC<ViewUsersProps> = () => {
                                     <div className='flex items-center'>
                                       <div className='ml-1'>
                                         <div className='font-medium text-white'>
-                                          null
+                                          ₦{delivery.amount}
                                         </div>
                                       </div>
                                     </div>
