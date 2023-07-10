@@ -41,13 +41,11 @@ export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
 
   return (
-    <SessionProvider>
-      <QueryClientProvider client={queryClient}>
-        <ToastMessages />
-        <Provider store={store}>
-          <Component {...pageProps} />
-        </Provider>
-      </QueryClientProvider>
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <ToastMessages />
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
+    </QueryClientProvider>
   );
 }

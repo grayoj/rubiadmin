@@ -314,13 +314,13 @@ export const ViewCorporateUsers: React.FC<ViewCorporateUsersProps> = () => {
                   Available actions
                   <div className='py-4'>
                     {user?.status === 'APPROVED' || 'ENABLED' ? (
-                      <button className='mx-4 cursor-not-allowed bg-productGreen inline-flex items-center justify-center rounded-md border border-transparent bg-product px-4 py-2 text-sm font-medium text-white shadow-sm sm:w-auto'>
+                      <button className='mx-4 bg-productGreen inline-flex items-center justify-center rounded-md border border-transparent bg-product px-4 py-2 text-sm font-medium text-white shadow-sm sm:w-auto'>
                         Approve Account
                       </button>
                     ) : (
                       <button
                         onClick={() => handleApprove(user.id)}
-                        className='mx-4 inline-flex items-center justify-center rounded-md border border-transparent bg-productGreen px-4 py-2 text-sm font-medium text-white shadow-sm sm:w-auto'
+                        className='mx-4 cursor-not-allowed inline-flex items-center justify-center rounded-md border border-transparent bg-productGreen px-4 py-2 text-sm font-medium text-white shadow-sm sm:w-auto'
                       >
                         Approve Account
                       </button>
