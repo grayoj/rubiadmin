@@ -40,7 +40,7 @@ export const DashboardCards: React.FC<DashboardCardProps> = () => {
     number
   >(["totalDeliveries"], async () => {
     const response = await fetch(
-      `${dashboardUrl}/api/delivery/deliveries/total`,
+      `${dashboardUrl}/api/delivery/mobile/all`,
     );
     if (!response.ok) {
       throw new Error("Failed to fetch total deliveries");
