@@ -5,6 +5,7 @@ import { Status } from './status/Status';
 import { Button } from './buttons/Button';
 import ReactPaginate from 'react-paginate';
 import { PaymentResponse } from '@/types/PaymentTypes';
+import { dashboardUrl } from '@/libs/Constants';
 
 interface SearchScreenProps {}
 
@@ -38,7 +39,7 @@ export const SearchScreen: React.FC<SearchScreenProps> = () => {
     console.log('Company Name:', companyName);
 
     fetch(
-      `http://localhost:9443/api/delivery/finance/search?fromDate=${fromDateString}&toDate=${toDateString}&companyName=${companyName}&page=${currentPage}&size=10`
+      `${dashboardUrl}/api/delivery/finance/search?fromDate=${fromDateString}&toDate=${toDateString}&companyName=${companyName}&page=${currentPage}&size=10`
     )
       .then((response) => {
         if (!response.ok) {
