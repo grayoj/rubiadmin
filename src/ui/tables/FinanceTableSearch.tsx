@@ -168,6 +168,12 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
                         >
                           Timestamp
                         </th>
+                        <th
+                          scope='col'
+                          className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                        >
+                          Payment Type
+                        </th>
                       </tr>
                     </thead>
                     <tbody className='divide-y divide-basicDark bg-darkTheme'>
@@ -259,6 +265,12 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
                             className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                           >
                             Timestamp
+                          </th>
+                          <th
+                            scope='col'
+                            className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                          >
+                            Payment Type
                           </th>
                         </tr>
                       </thead>
@@ -402,6 +414,15 @@ export const FinanceSearchTable: React.FC<FinanceSearchTableProps> = () => {
                                         ) : (
                                           <span>N/A</span>
                                         )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                        {finance?.paymentType}
                                       </div>
                                     </div>
                                   </div>

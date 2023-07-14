@@ -197,6 +197,12 @@ export const SearchScreen: React.FC<SearchScreenProps> = () => {
                   >
                     Timestamp
                   </th>
+                  <th
+                    scope='col'
+                    className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                  >
+                    Payment Type
+                  </th>
                 </tr>
               </thead>
               {paymentResponses.map((finance: any) => (
@@ -329,6 +335,15 @@ export const SearchScreen: React.FC<SearchScreenProps> = () => {
                                 ) : (
                                   <span>N/A</span>
                                 )}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                          <div className='flex items-center'>
+                            <div className='ml-1'>
+                              <div className='font-medium text-white'>
+                                {finance?.paymentType}
                               </div>
                             </div>
                           </div>

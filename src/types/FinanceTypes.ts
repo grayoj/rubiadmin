@@ -71,5 +71,5 @@ export interface Finance {
   paymentStatus: string;
  };
  createdAt: string;
-
+ paymentType: string;
 }
