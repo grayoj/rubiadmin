@@ -61,13 +61,14 @@ export const Fare: React.FC = () => {
               ? (
                 <div>
                   <p className="text-white mb-1 text-md font-extrabold">
-                    ₦{fareManagement?.amount}
+                    Fare: ₦{fareManagement?.amount}
+                  </p>
+
+                  <p className="text-white mb-1 text-md font-extrabold">
+                    Rate: ₦{fareManagement?.rate}
                   </p>
                   <p className="text-white mb-1 text-md font-extrabold">
                     Updated At: {fareManagement?.timestamp}
-                  </p>
-                  <p className="text-white mb-1 text-md font-extrabold">
-                    Updated At: {fareManagement?.rate}
                   </p>
                 </div>
               )
