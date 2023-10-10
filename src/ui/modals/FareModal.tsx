@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { dashboardUrl } from '@/libs/Constants';
-import { Button } from '../buttons/Button';
+import React, { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { dashboardUrl } from "@/libs/Constants";
+import { Button } from "../buttons/Button";
 
 interface FareModalProps {
   onClose: () => void;
 }
 
 export const FareModal: React.FC<FareModalProps> = ({ onClose }) => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
+  const [inputValueRate, setInputValueRate] = useState(""); // State for inputValueRate
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    if (e.target.name === "amount") {
+      setInputValue(e.target.value);
+    } else if (e.target.name === "rate") { // Handle inputValueRate
+      setInputValueRate(e.target.value);
+    }
   };
 
   const handleUpdate = async () => {
@@ -21,11 +26,12 @@ export const FareModal: React.FC<FareModalProps> = ({ onClose }) => {
         `${dashboardUrl}/api/user/users/fare/1`,
         {
           amount: inputValue,
-        }
+          rate: inputValueRate, // Include inputValueRate in the PUT request
+        },
       );
-      toast.success('Fare updated successfully');
+      toast.success("Fare updated successfully");
     } catch (error) {
-      toast.error('Failed to update fare');
+      toast.error("Failed to update fare");
     }
     onClose();
   };
@@ -35,31 +41,41 @@ export const FareModal: React.FC<FareModalProps> = ({ onClose }) => {
       const response = await axios.post(
         `${dashboardUrl}/api/user/users/fare/save`,
         {
-          data: inputValue,
-        }
+          amount: inputValue,
+          rate: inputValueRate, // Include inputValueRate in the POST request
+        },
       );
-      toast.success('Fare Created successfully');
+      toast.success("Fare Created successfully");
     } catch (error) {
-      toast.error('Failed to created fare');
+      toast.error("Failed to created fare");
     }
     onClose();
   };
 
   return (
-    <div className='bg-darkTheme p-8 rounded-lg'>
+    <div className="bg-darkTheme p-8 rounded-lg">
       <input
-        type='text'
+        type="text"
+        name="amount"
         value={inputValue}
         onChange={handleInputChange}
-        className='px-3 py-1.5 rounded-md outline-none'
-        placeholder='Enter Fare Amount'
+        className="px-3 py-1.5 rounded-md outline-none"
+        placeholder="Enter Fare Amount"
+      />
+      <input
+        type="text"
+        name="rate"
+        value={inputValueRate}
+        onChange={handleInputChange}
+        className="px-3 py-1.5 rounded-md outline-none"
+        placeholder="Enter Rate Amount"
       />
 
-      <div className='flex justify-between mt-4'>
+      <div className="flex justify-between mt-4">
         <button
           disabled={false}
           onClick={onClose}
-          className='flex justify-center rounded-md border border-transparent bg-productRed py-2 px-4 text-sm font-medium text-white shadow-sm hover:duration-300'
+          className="flex justify-center rounded-md border border-transparent bg-productRed py-2 px-4 text-sm font-medium text-white shadow-sm hover:duration-300"
         >
           Close
         </button>
@@ -67,7 +83,7 @@ export const FareModal: React.FC<FareModalProps> = ({ onClose }) => {
           Update
         </Button>
       </div>
-      <div className='flex justify-end my-2'>
+      <div className="flex justify-end my-2">
         <Button disabled={false} onClick={handleCreate}>
           Create
         </Button>

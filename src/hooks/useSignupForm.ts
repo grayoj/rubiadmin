@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { adminUrl } from '@/libs/Constants';
 import { toast } from 'react-toastify';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 export interface FormData {
  username: string;
