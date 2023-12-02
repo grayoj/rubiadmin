@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { deliveriesSkeletonRows } from './TableSkeleton';
 import { Button } from '../buttons/Button';
 import { Status } from '../status/Status';
+import axios from 'axios';
 
 interface Delivery {
   id: number;
@@ -31,6 +32,16 @@ interface Delivery {
   };
 }
 
+interface FareManagement {
+  id: number;
+  amount: string;
+  timestamp: string;
+  rate: string;
+  serviceFee: string;
+  commissionPercent: string;
+}
+
+
 interface DeliveriesTableprops {}
 
 export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
@@ -38,6 +49,10 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
   const ref = React.useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = React.useState(0);
   const router = useRouter();
+  const [fareManagement, setFareManagement] = React.useState<FareManagement | any>(
+    null,
+  );
+  const [commissionPayable, setCommissionPayable] = React.useState(0);
 
   const { data, isLoading, isError } = useQuery(
     ['deliveries', currentPage],
@@ -53,7 +68,7 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
     "Note that the fields 'Company Name' marked as 'N/A' means it was facilitated by an independent rider."
   );
 
-  const deliveries: Delivery[] = data?.content ?? [];
+  const deliveries: any = data?.content ?? [];
   const pageCount: number = data?.totalPages ?? 0;
   const queryKey: QueryKey = ['deliveries', currentPage];
 
@@ -74,6 +89,26 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
   function handleEditClick(id: number) {
     router.push(`/view-delivery/${id}`);
   }
+
+  React.useEffect(() => {
+    axios
+      .get(`${dashboardUrl}/api/user/users/fare`)
+      .then((response) => {
+        setFareManagement(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching Fare Management:", error);
+      });
+  }, []);
+
+  React.useEffect(() => {
+    if (deliveries.amount !== undefined && fareManagement.serviceFee !== undefined && fareManagement.commissionPercent !== undefined) {
+      const commission = (fareManagement.commissionPercent / 100) * (deliveries.amount + fareManagement.serviceFee);
+      setCommissionPayable(commission);
+    }
+  }, [deliveries, fareManagement]);
+
+
   return (
     <main className='flex-1 xl:ml-64 bg-basicDark'>
       <div className='py-12'>
@@ -144,6 +179,24 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
                               className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                             >
                               Amount
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Service Fee
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Commission Percent
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Commission Payable
                             </th>
                             <th
                               scope='col'
@@ -249,6 +302,24 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
                               >
                                 Amount
                               </th>
+                              <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Service Fee
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Commission Percent
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Commission Payable
+                            </th>
                               <th
                                 scope='col'
                                 className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
@@ -358,6 +429,33 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
                                     <div className='ml-1'>
                                       <div className='font-medium text-white'>
                                         ₦{delivery.amount}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                      ₦{fareManagement?.serviceFee}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                      ₦{fareManagement?.commissionPercent}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                      ₦{commissionPayable.toFixed(2)}
                                       </div>
                                     </div>
                                   </div>
