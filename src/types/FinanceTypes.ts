@@ -5,7 +5,7 @@ export interface Finance {
  authorizationUrl: string;
  accessCode: string;
  reference: string;
- amount: number;
+ amount: any;
  currency: string | null;
  delivery: {
   id: number;

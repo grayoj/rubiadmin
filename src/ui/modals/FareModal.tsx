@@ -10,12 +10,14 @@ interface FareModalProps {
 
 export const FareModal: React.FC<FareModalProps> = ({ onClose }) => {
   const [inputValue, setInputValue] = useState("");
-  const [inputValueRate, setInputValueRate] = useState(""); // State for inputValueRate
+  const [inputValueRate, setInputValueRate] = useState("");
+  const [inputValueServiceFee, setInputValueServiceFee] = useState("");
+  const [inputValueCommissionPercent, setInputValueCommissionPercent] = useState("")
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.name === "amount") {
       setInputValue(e.target.value);
-    } else if (e.target.name === "rate") { // Handle inputValueRate
+    } else if (e.target.name === "rate") {
       setInputValueRate(e.target.value);
     }
   };
@@ -26,7 +28,10 @@ export const FareModal: React.FC<FareModalProps> = ({ onClose }) => {
         `${dashboardUrl}/api/user/users/fare/1`,
         {
           amount: inputValue,
-          rate: inputValueRate, // Include inputValueRate in the PUT request
+          rate: inputValueRate,
+          serviceFee: inputValueServiceFee,
+          commissionPercent: inputValueCommissionPercent
+          // Include inputValueRate in the PUT request
         },
       );
       toast.success("Fare updated successfully");
@@ -42,7 +47,9 @@ export const FareModal: React.FC<FareModalProps> = ({ onClose }) => {
         `${dashboardUrl}/api/user/users/fare/save`,
         {
           amount: inputValue,
-          rate: inputValueRate, // Include inputValueRate in the POST request
+          rate: inputValueRate,
+          serviceFee: inputValueServiceFee,
+          commissionPercent: inputValueCommissionPercent
         },
       );
       toast.success("Fare Created successfully");
@@ -69,6 +76,23 @@ export const FareModal: React.FC<FareModalProps> = ({ onClose }) => {
         onChange={handleInputChange}
         className="px-3 py-1.5 rounded-md outline-none"
         placeholder="Enter Rate Amount"
+      />
+      <input
+        type="text"
+        name="serviceFee"
+        value={inputValueServiceFee}
+        onChange={handleInputChange}
+        className="px-3 py-1.5 rounded-md outline-none"
+        placeholder="Enter Service Fee"
+      />
+
+      <input
+        type="text"
+        name="commissionPercent"
+        value={inputValueCommissionPercent}
+        onChange={handleInputChange}
+        className="px-3 py-1.5 rounded-md outline-none"
+        placeholder="Enter Commission Percent"
       />
 
       <div className="flex justify-between mt-4">

@@ -9,6 +9,16 @@ import { Button } from '../buttons/Button';
 import { Status } from '../status/Status';
 import Link from 'next/link';
 import { Finance } from '@/types/FinanceTypes';
+import axios from 'axios';
+
+interface FareManagement {
+  id: number;
+  amount: string;
+  timestamp: string;
+  rate: string;
+  serviceFee: string;
+  commissionPercent: string;
+}
 
 interface FinanceTableprops {}
 
@@ -17,6 +27,10 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
   const ref = React.useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = React.useState(0);
   const router = useRouter();
+  const [fareManagement, setFareManagement] = React.useState<FareManagement | any>(
+    null,
+  );
+  const [commissionPayable, setCommissionPayable] = React.useState(0);
 
   const { data, isLoading, isError } = useQuery(['finance', currentPage], () =>
     fetch(
@@ -26,7 +40,20 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
       .then((data) => data)
   );
 
-  const finance: Finance[] = data?.content ?? [];
+  React.useEffect(() => {
+    axios
+      .get(`${dashboardUrl}/api/user/users/fare`)
+      .then((response) => {
+        setFareManagement(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching Fare Management:", error);
+      });
+  }, []);
+
+  
+
+  const finance: any = data?.content ?? [];
   const pageCount: number = data?.totalPages ?? 0;
   const queryKey: QueryKey = ['finance', currentPage];
 
@@ -43,6 +70,14 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
       autoClose: 2000,
     });
   }
+
+  React.useEffect(() => {
+    if (finance.amount !== undefined && fareManagement.serviceFee !== undefined && fareManagement.commissionPercent !== undefined) {
+      const commission = (fareManagement.commissionPercent / 100) * (finance.amount + fareManagement.serviceFee);
+      setCommissionPayable(commission);
+    }
+  }, [finance, fareManagement]);
+
 
   return (
     <main className='flex-1 xl:ml-64 bg-basicDark'>
@@ -112,6 +147,24 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                               className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
                             >
                               Amount
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Service Fee
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Commission Percent
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Commission Payable
                             </th>
                             <th
                               scope='col'
@@ -211,6 +264,24 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                               >
                                 Amount
                               </th>
+                              <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Service Fee
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Commission Percent
+                            </th>
+                            <th
+                              scope='col'
+                              className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
+                            >
+                              Commission Payable
+                            </th>
                               <th
                                 scope='col'
                                 className='py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6'
@@ -317,6 +388,33 @@ export const FinanceTable: React.FC<FinanceTableprops> = () => {
                                     <div className='ml-1'>
                                       <div className='font-medium text-white'>
                                         {finance.amount}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                      ₦{fareManagement?.serviceFee}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                      ₦{fareManagement?.commissionPercent}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+                                  <div className='flex items-center'>
+                                    <div className='ml-1'>
+                                      <div className='font-medium text-white'>
+                                      ₦{commissionPayable.toFixed(2)}
                                       </div>
                                     </div>
                                   </div>

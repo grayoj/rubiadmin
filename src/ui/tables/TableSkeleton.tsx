@@ -324,5 +324,13 @@ export const financeSkeletonRows = Array(5)
         <div className='animate-pulse bg-white h-4 w-1/4 mb-2'></div>
         <div className='animate-pulse bg-white h-4 w-3/4'></div>
       </td>
+      <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+        <div className='animate-pulse bg-white h-4 w-1/4 mb-2'></div>
+        <div className='animate-pulse bg-white h-4 w-3/4'></div>
+      </td>
+      <td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6'>
+        <div className='animate-pulse bg-white h-4 w-1/4 mb-2'></div>
+        <div className='animate-pulse bg-white h-4 w-3/4'></div>
+      </td>
     </tr>
   ));

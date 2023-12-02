@@ -10,6 +10,8 @@ interface FareManagement {
   amount: string;
   timestamp: string;
   rate: string;
+  serviceFee: string;
+  commissionPercent: string;
 }
 
 export const Fare: React.FC = () => {
@@ -17,6 +19,7 @@ export const Fare: React.FC = () => {
   const [fareManagement, setFareManagement] = useState<FareManagement | null>(
     null,
   );
+  
 
   useEffect(() => {
     axios
@@ -68,8 +71,15 @@ export const Fare: React.FC = () => {
                     Rate: ₦{fareManagement?.rate}
                   </p>
                   <p className="text-white mb-1 text-md font-extrabold">
+                    Service Fee: ₦{fareManagement?.serviceFee}
+                  </p>
+                  <p className="text-white mb-1 text-md font-extrabold">
+                    Commission Percent: %{fareManagement?.commissionPercent}
+                  </p>
+                  <p className="text-white mb-1 text-md font-extrabold">
                     Updated At: {fareManagement?.timestamp}
                   </p>
+
                 </div>
               )
               : (
