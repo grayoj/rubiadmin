@@ -23,7 +23,6 @@ export const sidebarItems = [
     current: true,
     children: [
       { name: "Corporate Riders", href: "/riders/corporate" },
-      { name: "Independent Riders", href: "/riders/independent" },
     ],
   },
   {

@@ -347,8 +347,8 @@ export const CorporateTable: React.FC = () => {
                               <div className='flex items-center'>
                                 <div className='ml-1'>
                                   <div className='font-medium text-white'>
-                                    {user.status === 'NOT_APPROVED' ? (
-                                      <Status color='red'>Not Approved</Status>
+                                    {user.status === 'NOT_APPROVED' || user.status === 'DISABLED' ? (
+                                      <Status color='red'>Not Approved or Disabled</Status>
                                     ) : (
                                       <Status color='green'>Approved</Status>
                                     )}
