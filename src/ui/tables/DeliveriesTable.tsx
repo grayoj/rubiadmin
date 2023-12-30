@@ -105,7 +105,7 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
     // Check if fareManagement and deliveries exist
     if (fareManagement && deliveries.length > 0) {
       // Loop through each delivery and calculate commission
-      const totalCommission = deliveries.reduce((sum: any, delivery: any) => {
+      const commissions = deliveries.map((delivery: any) => {
         // Convert string values to numbers
         const amount = parseFloat(delivery.amount);
         const serviceFee = parseFloat(fareManagement.serviceFee);
@@ -114,20 +114,19 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
         // Check if conversion was successful
         if (isNaN(amount) || isNaN(serviceFee) || isNaN(commissionPercent)) {
           console.error('Error converting values to numbers');
-          return sum;
+          return 0; // Set commission to 0 if conversion fails
         }
   
         // Calculate commission for each delivery
         const commission = (commissionPercent / 100) * (amount + serviceFee);
   
-        // Add the commission for this delivery to the total sum
-        return sum + commission;
-      }, 0);
+        return commission;
+      });
   
-      // Set the total commission in state
-      setCommissionPayable(totalCommission);
+      // Set the commissions for each delivery in state
+      setCommissionPayable(commissions);
     }
-  }, [deliveries, fareManagement]);
+  }, [deliveries, fareManagement]);  
   
 
   return (
