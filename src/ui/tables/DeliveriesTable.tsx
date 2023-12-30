@@ -102,12 +102,33 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
   }, []);
 
   React.useEffect(() => {
-    if (deliveries.amount !== undefined && fareManagement.serviceFee !== undefined && fareManagement.commissionPercent !== undefined) {
-      const commission = (fareManagement.commissionPercent / 100) * (deliveries.amount + fareManagement.serviceFee);
-      setCommissionPayable(commission);
+    // Check if fareManagement and deliveries exist
+    if (fareManagement && deliveries.length > 0) {
+      // Loop through each delivery and calculate commission
+      const totalCommission = deliveries.reduce((sum: any, delivery: any) => {
+        // Convert string values to numbers
+        const amount = parseFloat(delivery.amount);
+        const serviceFee = parseFloat(fareManagement.serviceFee);
+        const commissionPercent = parseFloat(fareManagement.commissionPercent);
+  
+        // Check if conversion was successful
+        if (isNaN(amount) || isNaN(serviceFee) || isNaN(commissionPercent)) {
+          console.error('Error converting values to numbers');
+          return sum;
+        }
+  
+        // Calculate commission for each delivery
+        const commission = (commissionPercent / 100) * (amount + serviceFee);
+  
+        // Add the commission for this delivery to the total sum
+        return sum + commission;
+      }, 0);
+  
+      // Set the total commission in state
+      setCommissionPayable(totalCommission);
     }
   }, [deliveries, fareManagement]);
-
+  
 
   return (
     <main className='flex-1 xl:ml-64 bg-basicDark'>
@@ -446,7 +467,7 @@ export const DeliveriesTable: React.FC<DeliveriesTableprops> = () => {
                                   <div className='flex items-center'>
                                     <div className='ml-1'>
                                       <div className='font-medium text-white'>
-                                      ₦{fareManagement?.commissionPercent}
+                                      %{fareManagement?.commissionPercent}
                                       </div>
                                     </div>
                                   </div>
